@@ -1,0 +1,40 @@
+package my.android.testappli137;
+
+public class Subject020 {
+  private String textdata[][] = {
+		{
+			"091005",
+			"次のうち、LANの特徴を正しく述べているものはどれか。",
+			" ",
+			"*]物理的に設置した機器やケーブルは基本的に自前で運用・管理する。",
+			" ]通信事業者が設置した機器やケーブルを使用するサービスである。",
+			"*]学校や企業など地理的に制限された範囲内で構築されるネットワークである。",
+			" ]建物内のネットワークなどを地理的に広範囲に及んで相互接続したネットワークである。",
+		},
+		{
+			"091005",
+			"次のうち、WANの特徴を正しく述べているものはどれか。",
+			" ",
+			" ]物理的に設置した機器やケーブルは基本的に自前で運用・管理する。",
+			"*]通信事業者が設置した機器やケーブルを使用するサービスである。",
+			" ]学校や企業など地理的に制限された範囲内で構築されるネットワークである。",
+			"*]建物内のネットワークなどを地理的に広範囲に及んで相互接続したネットワークである。",
+		}
+	};
+
+	int Qtotal() {
+		return textdata.length;
+	}
+
+	String Text(int qno, int line) {
+		return textdata[qno][line];
+	}
+
+	int Qlength(int qno) {
+		return textdata[qno].length;
+	}
+
+	String Qdate(int qno) {
+		return textdata[qno][0];
+	}
+}
