@@ -1,0 +1,40 @@
+package my.android.testappli137;
+
+public class Subject010 {
+  private String textdata[][] = {
+		{
+			"091005",
+			"次のうち、コンピュータネットワークを構成する基本的な要素はどれか。",
+			" ",
+			"*]ソフトウェア",
+			" ]ミドルウェア",
+			"*]ハードウェア",
+			" ]メモリウェア",
+		},
+		{
+			"091005",
+			"大学や企業内など地理的に限定された範囲に構築されるネットワークはどれか。",
+			" ",
+			" ]ワールド・エリア・ネットワーク",
+			"*]ローカル・エリア・ネットワーク",
+			" ]アーバン・エリア・ネットワーク",
+			" ]ワイド・エリア・ネットワーク",
+		}
+	};
+
+	int Qtotal() {
+		return textdata.length;
+	}
+
+	String Text(int qno, int line) {
+		return textdata[qno][line];
+	}
+
+	int Qlength(int qno) {
+		return textdata[qno].length;
+	}
+
+	String Qdate(int qno) {
+		return textdata[qno][0];
+	}
+}
