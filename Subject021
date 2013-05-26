@@ -1,0 +1,40 @@
+package my.android.testappli137;
+
+public class Subject021 {
+  private String textdata[][] = {
+		{
+			"091005",
+			"ISOが策定した、プロトコル開発時に参考にされるガイドラインはどれか。",
+			" ",
+			"*]OSI参照モデル",
+			" ]ISO参照モデル",
+			" ]IOS参照モデル",
+			" ]SIO参照モデル",
+		},
+		{
+			"091005",
+			"次のうち、ハードウェアに分類されるものはどれか。",
+			" ",
+			"*]CPU",
+			"*]メモリ",
+			" ]NOS",
+			"*]マザーボード",
+		}
+	};
+
+	int Qtotal() {
+		return textdata.length;
+	}
+
+	String Text(int qno, int line) {
+		return textdata[qno][line];
+	}
+
+	int Qlength(int qno) {
+		return textdata[qno].length;
+	}
+
+	String Qdate(int qno) {
+		return textdata[qno][0];
+	}
+}
