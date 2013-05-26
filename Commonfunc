@@ -1,0 +1,15 @@
+package my.android.testappli137;
+
+import java.util.Random;
+
+public class Commonfunc {
+  Random rdmbase = new Random();
+
+	public int RandNum(int seed) {
+		int result;
+		result = rdmbase.nextInt();
+		result &= 0x7fffffff;
+		result %= seed;
+		return result;
+	}
+}
