@@ -1,0 +1,514 @@
+package my.android.testappli137;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
+import my.android.testappli137.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+public class MainActivity extends Activity implements OnClickListener {
+    /** Called when the activity is first created. */
+
+  int qno;
+
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+
+        Button button1 = (Button)findViewById(R.id.button1);
+        Button button2 = (Button)findViewById(R.id.button2);
+        Button button3 = (Button)findViewById(R.id.button3);
+
+        button1.setOnClickListener(this);
+        button2.setOnClickListener(this);
+        button3.setOnClickListener(this);
+
+		QatInit();
+		qno = NextQuestion(qcnt);
+    }
+
+	Subject010 stext1 = new Subject010();
+	Subject011 stext2 = new Subject011();
+	Subject020 stext3 = new Subject020();
+	Subject021 stext4 = new Subject021();
+	Commonfunc cf = new Commonfunc();
+
+	int SUBJECT_TOTAL = stext1.Qtotal() + stext2.Qtotal() + stext3.Qtotal() + stext4.Qtotal();
+	int qat[][] = new int[SUBJECT_TOTAL][5];
+	StringBuffer[] qtemplate = new StringBuffer[500];
+
+	int qtextno;
+	int choiceno;
+	StringBuffer[] mailchoice = new StringBuffer[500];
+
+	int Q_LATEST = SUBJECT_TOTAL / 8;
+	int Q_PRIORITY = SUBJECT_TOTAL / 4;
+	int Q_RANDOM = SUBJECT_TOTAL / 2;
+
+	int Q_YET = 0;
+	int Q_RIGHT = 1;
+	int Q_MISTAKES = 2;
+
+	int qcnt = 1;
+	int badcnt = 0;
+
+	int[] checkflag = new int[9];
+	int wrongcnt = 0;
+
+    public void onClick(View arg0) {
+    	TextView textSetting2 = (TextView)findViewById(R.id.textView2);
+    	TextView textSetting3 = (TextView)findViewById(R.id.textView3);
+    	Intent intent = new Intent();
+    	intent.setAction(Intent.ACTION_SEND);
+    	intent.setType("message/rfc822");
+    	String SDFile = android.os.Environment.getExternalStorageDirectory().getPath()+ "/iPentec.SDCardFileAccess/memo.txt";
+    	File file = new File(SDFile);
+    	file.getParentFile().mkdir();
+    	StringBuffer mailtext = new StringBuffer("");
+    	int checkresult = 0;
+    	int idx;
+		int qcnt1;
+		int badcnt1;
+		int readflag;
+    	StringBuffer qtext = new StringBuffer("");
+        switch(arg0.getId()){
+        case R.id.button1:
+        	if (wrongcnt < 2) {
+        		qno = NextQuestion(qcnt);
+        		SetTemplate(qno);
+        		qDisp(qno);
+        	}
+            break;
+        case R.id.button2:
+        	CheckBox checkBox1 = (CheckBox) findViewById(R.id.checkBox1);
+        	CheckBox checkBox2 = (CheckBox) findViewById(R.id.checkBox2);
+        	CheckBox checkBox3 = (CheckBox) findViewById(R.id.checkBox3);
+        	CheckBox checkBox4 = (CheckBox) findViewById(R.id.checkBox4);
+        	CheckBox checkBox5 = (CheckBox) findViewById(R.id.checkBox5);
+        	CheckBox checkBox6 = (CheckBox) findViewById(R.id.checkBox6);
+        	CheckBox checkBox7 = (CheckBox) findViewById(R.id.checkBox7);
+        	CheckBox checkBox8 = (CheckBox) findViewById(R.id.checkBox8);
+        	CheckBox checkBox9 = (CheckBox) findViewById(R.id.checkBox9);
+        	if(checkflag[0] == 1 && checkBox1.isChecked() == true) {
+        		qtext.append("o");
+        	} else if(checkflag[0] == 0 && checkBox1.isChecked() == false) {
+        		qtext.append("-");
+        	} else if(checkflag[0] == -1) {
+//        		qtext.append(".");
+        	} else {
+        		qtext.append("x");
+        		checkresult++;
+        	}
+        	if(checkflag[1] == 1 && checkBox2.isChecked() == true) {
+        		qtext.append("o");
+        	} else if(checkflag[1] == 0 && checkBox2.isChecked() == false) {
+        		qtext.append("-");
+        	} else if(checkflag[1] == -1) {
+//        		qtext.append(".");
+        	} else {
+        		qtext.append("x");
+        		checkresult++;
+        	}
+        	if(checkflag[2] == 1 && checkBox3.isChecked() == true) {
+        		qtext.append("o");
+        	} else if(checkflag[2] == 0 && checkBox3.isChecked() == false) {
+        		qtext.append("-");
+        	} else if(checkflag[2] == -1) {
+//        		qtext.append(".");
+        	} else {
+        		qtext.append("x");
+        		checkresult++;
+        	}
+        	if(checkflag[3] == 1 && checkBox4.isChecked() == true) {
+        		qtext.append("o");
+        	} else if(checkflag[3] == 0 && checkBox4.isChecked() == false) {
+        		qtext.append("-");
+        	} else if(checkflag[3] == -1) {
+//        		qtext.append(".");
+        	} else {
+        		qtext.append("x");
+        		checkresult++;
+        	}
+        	if(checkflag[4] == 1 && checkBox5.isChecked() == true) {
+        		qtext.append("o");
+        	} else if(checkflag[4] == 0 && checkBox5.isChecked() == false) {
+        		qtext.append("-");
+        	} else if(checkflag[4] == -1) {
+//        		qtext.append(".");
+        	} else {
+        		qtext.append("x");
+        		checkresult++;
+        	}
+        	if(checkflag[5] == 1 && checkBox6.isChecked() == true) {
+        		qtext.append("o");
+        	} else if(checkflag[5] == 0 && checkBox6.isChecked() == false) {
+        		qtext.append("-");
+        	} else if(checkflag[5] == -1) {
+//        		qtext.append(".");
+        	} else {
+        		qtext.append("x");
+        		checkresult++;
+        	}
+        	if(checkflag[6] == 1 && checkBox7.isChecked() == true) {
+        		qtext.append("o");
+        	} else if(checkflag[6] == 0 && checkBox7.isChecked() == false) {
+        		qtext.append("-");
+        	} else if(checkflag[6] == -1) {
+//        		qtext.append(".");
+        	} else {
+        		qtext.append("x");
+        		checkresult++;
+        	}
+        	if(checkflag[7] == 1 && checkBox8.isChecked() == true) {
+        		qtext.append("o");
+        	} else if(checkflag[7] == 0 && checkBox8.isChecked() == false) {
+        		qtext.append("-");
+        	} else if(checkflag[7] == -1) {
+//        		qtext.append(".");
+        	} else {
+        		qtext.append("x");
+        		checkresult++;
+        	}
+        	if(checkflag[8] == 1 && checkBox9.isChecked() == true) {
+        		qtext.append("o");
+        	} else if(checkflag[8] == 0 && checkBox9.isChecked() == false) {
+        		qtext.append("-");
+        	} else if(checkflag[8] == -1) {
+//        		qtext.append(".");
+        	} else {
+        		qtext.append("x");
+        		checkresult++;
+        	}
+        	if (checkresult == 0){
+        		if (wrongcnt <= 2) {
+            		qcnt++;
+    				if (qat[qno][4] == Q_MISTAKES) badcnt--;
+    				qat[qno][4] = Q_RIGHT;
+                	textSetting2.setText("Good");
+					if (qcnt > SUBJECT_TOTAL) {
+						QatInit();
+						qcnt = 1;
+					}
+					if (qcnt % 5 == 0) {
+			    		qcnt1 = 0;
+			    		badcnt1 = 0;
+			    		readflag = 0;
+						try{
+							file.delete();
+							FileOutputStream fos = new FileOutputStream(file,true);
+							OutputStreamWriter osw = new OutputStreamWriter(fos,"UTF-8");
+							PrintWriter pw = new PrintWriter(osw);
+						    String str;;
+							for (idx = 0; idx < SUBJECT_TOTAL; idx++) {
+								if (idx % 10 == 0) {
+								    str = qat[idx][4] + ":" + idx + "\r\n";
+								} else {
+								    str = qat[idx][4] + "\r\n";
+								}
+							    pw.append(str);
+							    if (qat[idx][4] == 1) qcnt1++;
+							    if (qat[idx][4] == 2) badcnt1++;
+							}
+							pw.close();
+							osw.close();
+							fos.close();
+				    		readflag = 1;
+						}catch(IOException e){
+							 e.printStackTrace();
+						}
+			        	if (readflag == 1) {
+			            	textSetting3.setText("Save\r\n("+qcnt1+",x"+badcnt1+")");
+			        	} else {
+			            	textSetting3.setText("Save(Error!)");
+			        	}
+					}
+        		} else {
+                	textSetting2.setText("Ok");
+        		}
+        		qno = NextQuestion(qcnt);
+        		SetTemplate(qno);
+            	qDisp(qno);
+            	wrongcnt = 0;
+        	} else {
+    			wrongcnt++;
+    			if (wrongcnt == Q_RIGHT && qcnt < Q_PRIORITY) {
+                	textSetting2.setText("Bad:"+wrongcnt);
+    			} else if (wrongcnt == Q_MISTAKES && qcnt < Q_LATEST) {
+                	textSetting2.setText("Bad:"+wrongcnt);
+        		} else {
+        			wrongcnt = 9;
+                	textSetting2.setText("Bad\r\n("+qtext+")");
+    				if (qat[qno][4] != Q_MISTAKES) {
+    					badcnt++;
+        				qat[qno][4] = Q_MISTAKES;
+    				}
+    				intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"xxxxxxxx@gmail.com"});
+    				intent.putExtra(Intent.EXTRA_SUBJECT, "----- Wrong Answer -----");
+    				for (idx = 0; idx < qtextno; idx++) {
+    					mailtext.append(qtemplate[idx]+"\r\n");
+    				}
+    				for (idx = 0; idx < choiceno; idx++) {
+    					mailtext.append(mailchoice[idx]+"\r\n");
+    				}
+					mailtext.append(qtext);
+    				intent.putExtra(Intent.EXTRA_TEXT,mailtext.toString());
+    				startActivity(intent);
+        		}
+        	}
+            break;
+        case R.id.button3:
+    		String s = "*";
+    		idx = 0;
+    		qcnt1 = 0;
+    		badcnt1 = 0;
+    		readflag = 0;
+        	try{
+        		FileInputStream fis = new FileInputStream(file);
+        		InputStreamReader isr = new InputStreamReader(fis,"UTF-8");
+        		BufferedReader br = new BufferedReader(isr);
+        		while((s = br.readLine())!= null){
+        			if (s.substring(0,1).equals("1") == true) {
+    					qat[idx++][4] = 1;
+        				qcnt1++;
+        			} else if (s.substring(0,1).equals("2") == true) {
+    					qat[idx++][4] = 2;
+        				badcnt1++;
+        			} else {
+    					qat[idx++][4] = 0;
+        			}
+        			readflag = 1;
+        		}
+        		br.close();
+        		isr.close();
+        		fis.close();
+        	}catch(IOException e){
+        		 e.printStackTrace();
+        	}
+        	if (readflag == 1) {
+        		qcnt = qcnt1 + 1;
+        		badcnt = badcnt1;
+        		qno = NextQuestion(qcnt);
+        		SetTemplate(qno);
+        		qDisp(qno);
+            	textSetting3.setText("Load\r\n("+qcnt1+",x"+badcnt1+")");
+        	} else {
+            	textSetting3.setText("Load(Error!)");
+        	}
+        	break;
+        }
+    }
+
+	public void qDisp(int qno) {
+    	TextView textSetting1 = (TextView)findViewById(R.id.textView1);
+    	TextView textSetting11 = (TextView)findViewById(R.id.textView11);
+    	CheckBox checkBox1 = (CheckBox) findViewById(R.id.checkBox1);
+    	CheckBox checkBox2 = (CheckBox) findViewById(R.id.checkBox2);
+    	CheckBox checkBox3 = (CheckBox) findViewById(R.id.checkBox3);
+    	CheckBox checkBox4 = (CheckBox) findViewById(R.id.checkBox4);
+    	CheckBox checkBox5 = (CheckBox) findViewById(R.id.checkBox5);
+    	CheckBox checkBox6 = (CheckBox) findViewById(R.id.checkBox6);
+    	CheckBox checkBox7 = (CheckBox) findViewById(R.id.checkBox7);
+    	CheckBox checkBox8 = (CheckBox) findViewById(R.id.checkBox8);
+    	CheckBox checkBox9 = (CheckBox) findViewById(R.id.checkBox9);
+    	ScrollView scrollView1 = (ScrollView) findViewById(R.id.scrollView1);
+
+    	int idx;
+    	StringBuffer qtext;
+    	qtext = new StringBuffer(qtemplate[0].toString());
+		if (qat[qno][4] == Q_MISTAKES) qtext.append("　!!!!! 誤答問題です !!!!!");
+    	qtextno = 1;
+    	for (idx = 1; idx < qat[qno][2]; idx++) {
+			if (qtemplate[idx].length() > 2) {
+				if (qtemplate[idx].substring(0,2).equals("*]") == true || qtemplate[idx].substring(0,2).equals(" ]") == true) break;
+			}
+    		qtext.append("\r\n"+qtemplate[idx].toString());
+        	qtextno++;
+    	}
+    	textSetting1.setText(qtext);
+		StringBuffer[] readchoice = new StringBuffer[500];
+		int[] choice = new int[9];
+		int nextchoice;
+		int anscnt = 0;
+    	choiceno = 0;
+    	readchoice[choiceno] = new StringBuffer(qtemplate[idx++].toString());
+		choice[choiceno] = 1;
+		choiceno++;
+    	for (; idx < qat[qno][2]; idx++) {
+        	readchoice[choiceno] = new StringBuffer(qtemplate[idx].toString());
+			choice[choiceno] = 1;
+			choiceno++;
+    	}
+    	scrollView1.fullScroll(View.FOCUS_UP);
+    	qtext.setLength(0);
+    	checkBox1.setText("");
+    	checkBox1.setChecked(false);
+    	checkBox1.setVisibility(View.GONE);
+    	checkBox2.setText("");
+    	checkBox2.setChecked(false);
+    	checkBox2.setVisibility(View.GONE);
+    	checkBox3.setText("");
+    	checkBox3.setChecked(false);
+    	checkBox3.setVisibility(View.GONE);
+    	checkBox4.setText("");
+    	checkBox4.setChecked(false);
+    	checkBox4.setVisibility(View.GONE);
+    	checkBox5.setText("");
+    	checkBox5.setChecked(false);
+    	checkBox5.setVisibility(View.GONE);
+    	checkBox6.setText("");
+    	checkBox6.setChecked(false);
+    	checkBox6.setVisibility(View.GONE);
+    	checkBox7.setText("");
+    	checkBox7.setChecked(false);
+    	checkBox7.setVisibility(View.GONE);
+    	checkBox8.setText("");
+    	checkBox8.setChecked(false);
+    	checkBox8.setVisibility(View.GONE);
+    	checkBox9.setText("");
+    	checkBox9.setChecked(false);
+    	checkBox9.setVisibility(View.GONE);
+    	for (idx = 0; idx < 9; idx++) checkflag[idx] = -1;
+    	for (idx = 0; idx < choiceno && idx < 9; idx++) {
+			do {
+				nextchoice = cf.RandNum(choiceno);
+			} while (choice[nextchoice] == 0);
+			choice[nextchoice] = 0;
+			switch (idx) {
+			case 0:
+		    	checkBox1.setText(readchoice[nextchoice].substring(2));
+		    	checkBox1.setVisibility(View.VISIBLE);
+		    	break;
+			case 1:
+		    	checkBox2.setText(readchoice[nextchoice].substring(2));
+		    	checkBox2.setVisibility(View.VISIBLE);
+		    	break;
+			case 2:
+		    	checkBox3.setText(readchoice[nextchoice].substring(2));
+		    	checkBox3.setVisibility(View.VISIBLE);
+		    	break;
+			case 3:
+		    	checkBox4.setText(readchoice[nextchoice].substring(2));
+		    	checkBox4.setVisibility(View.VISIBLE);
+		    	break;
+			case 4:
+		    	checkBox5.setText(readchoice[nextchoice].substring(2));
+		    	checkBox5.setVisibility(View.VISIBLE);
+		    	break;
+			case 5:
+		    	checkBox6.setText(readchoice[nextchoice].substring(2));
+		    	checkBox6.setVisibility(View.VISIBLE);
+		    	break;
+			case 6:
+		    	checkBox7.setText(readchoice[nextchoice].substring(2));
+		    	checkBox7.setVisibility(View.VISIBLE);
+		    	break;
+			case 7:
+		    	checkBox8.setText(readchoice[nextchoice].substring(2));
+		    	checkBox8.setVisibility(View.VISIBLE);
+		    	break;
+			case 8:
+		    	checkBox9.setText(readchoice[nextchoice].substring(2));
+		    	checkBox9.setVisibility(View.VISIBLE);
+		    	break;
+			}
+        	mailchoice[idx] = new StringBuffer(readchoice[nextchoice]);
+			if (readchoice[nextchoice].substring(0,2).equals("*]") == true ) {
+				checkflag[idx] = 1;
+				anscnt++;
+			}
+			if (readchoice[nextchoice].substring(0,2).equals(" ]") == true ) checkflag[idx] = 0;
+    	}
+		qtext.append(qcnt+"/"+SUBJECT_TOTAL+"\r\nx"+badcnt);
+    	textSetting11.setText(qtext);
+		if (anscnt == 0) {
+	    	for (idx = 0; idx < 9; idx++) checkflag[idx] = 1;
+		}
+    }
+
+	public void QatInit() {
+		int idx1;
+		int idx2 = 0;
+		for (idx1 = 0; idx1 < SUBJECT_TOTAL; idx1++) {
+			if (idx1 < stext1.Qtotal()) {
+				qat[idx1][0] = 1;
+				qat[idx1][1] = idx2;
+				qat[idx1][2] = stext1.Qlength(idx2);
+				qat[idx1][3] = Integer.valueOf(stext1.Qdate(idx2++)).intValue();
+				qat[idx1][4] = Q_YET;
+				if (idx2 >= stext1.Qtotal()) idx2 = 0;
+			} else if (idx1 < stext1.Qtotal() + stext2.Qtotal()) {
+				qat[idx1][0] = 2;
+				qat[idx1][1] = idx2;
+				qat[idx1][2] = stext2.Qlength(idx2);
+				qat[idx1][3] = Integer.valueOf(stext2.Qdate(idx2++)).intValue();
+				qat[idx1][4] = Q_YET;
+				if (idx2 >= stext2.Qtotal()) idx2 = 0;
+			} else if (idx1 < stext1.Qtotal() + stext2.Qtotal() + stext3.Qtotal()) {
+				qat[idx1][0] = 3;
+				qat[idx1][1] = idx2;
+				qat[idx1][2] = stext3.Qlength(idx2);
+				qat[idx1][3] = Integer.valueOf(stext3.Qdate(idx2++)).intValue();
+				qat[idx1][4] = Q_YET;
+				if (idx2 >= stext3.Qtotal()) idx2 = 0;
+			} else {
+				qat[idx1][0] = 4;
+				qat[idx1][1] = idx2;
+				qat[idx1][2] = stext4.Qlength(idx2);
+				qat[idx1][3] = Integer.valueOf(stext4.Qdate(idx2++)).intValue();
+				qat[idx1][4] = Q_YET;
+			}
+		}
+	}
+
+	public void SetTemplate(int qno) {
+		int idx;
+		for (idx = 0; idx < qat[qno][2]; idx++) {
+			if (qat[qno][0] ==  1) {
+				qtemplate[idx] = new StringBuffer(stext1.Text(qat[qno][1],idx).toString());
+			} else if (qat[qno][0] ==  2) {
+				qtemplate[idx] = new StringBuffer(stext2.Text(qat[qno][1],idx).toString());
+			} else if (qat[qno][0] ==  3) {
+				qtemplate[idx] = new StringBuffer(stext3.Text(qat[qno][1],idx).toString());
+			} else {
+				qtemplate[idx] = new StringBuffer(stext4.Text(qat[qno][1],idx).toString());
+			}
+		}
+	}
+
+	public int NextQuestion(int qcnt) {
+		int nextq;
+		int qno;
+		int idx;
+		do {
+			nextq = cf.RandNum(SUBJECT_TOTAL);
+		} while (qat[nextq][4] == Q_RIGHT);
+		qno = nextq;
+		for (idx = 0; idx < SUBJECT_TOTAL/50; idx++) {
+			do {
+				nextq = cf.RandNum(SUBJECT_TOTAL);
+			} while (qat[nextq][4] == Q_RIGHT);
+			if (qcnt < Q_RANDOM && qat[qno][3] < qat[nextq][3]) {
+				qno = nextq;
+			} else if (qcnt >= Q_RANDOM && qat[nextq][4] == Q_MISTAKES) {
+				qno = nextq;
+			}
+		}
+		return qno;
+	}
+
+}
