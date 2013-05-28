@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TestAppli137</string>
+    <string name="teststring">＊</string>
+    <string name="answerstring">●●●●●</string>
+    <string name="selectstring1">①</string>
+    <string name="selectstring2">②</string>
+    <string name="selectstring3">③</string>
+    <string name="selectstring4">④</string>
+    <string name="selectstring5">⑤</string>
+    <string name="selectstring6">⑥</string>
+    <string name="selectstring7">⑦</string>
+    <string name="selectstring8">⑧</string>
+    <string name="selectstring9">⑨</string>
+    <string name="nextstring">Path</string>
+    <string name="pathstring">Check</string>
+    <string name="loadstring">Load</string>
+    <string name="checkstring">＊</string>
+    <string name="resetstring">←Reset</string>
+    <string name="reloadstring">←Reload</string>
+
+</resources>
